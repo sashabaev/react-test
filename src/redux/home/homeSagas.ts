@@ -7,7 +7,7 @@ export function* doInit(): IterableIterator<any> {
     try {
       let data = action.books;
       if(!action.books || action.books.length === 0){
-      const fetchData = yield call(Products.getProducts);
+      const fetchData = yield call(Products.getBooks);
        data = fetchData.data
     } 
       console.log(JSON.stringify(data));

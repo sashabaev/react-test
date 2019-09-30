@@ -1,5 +1,5 @@
 import { BaseState } from "../../types/baseState";
-import { Product } from "../../types";
+import { Book } from "../../types";
 
 
 export enum CartActions {
@@ -10,6 +10,6 @@ export enum CartActions {
 }
 
 export interface CartState extends BaseState {
-  books: Product[]; 
+  books: Book[]; 
   count: number;
 }

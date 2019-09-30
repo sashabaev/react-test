@@ -1,18 +1,26 @@
 import axios from "./api";
-import { Product } from "../types";
+import { Book } from "../types";
 
-export const getProducts = () => {
+export const getBooks = () => {
   return axios.get(`/books`);
 };
 
-export const addProduct = (book: Product) => {
+export const getPaging = (limit: number, page: number) => {
+  let data = {
+    limit: limit,
+    page: page
+  }
+  return axios.post(`/books/paginate`, data);
+};
+
+export const addBook = (book: Book) => {
   return axios.post(`/books`, book)
 };
 
-export const updateProduct = (book: Product) => {  
-  return axios.put(`/books/` + book.id, book);
+export const updateBook = (book: Book) => {
+  return axios.put(`/books`, book);
 };
 
-export const deleteProduct = (id: string) => {
-  return axios.delete(`books/`+ id);
+export const deleteBook = (id: string) => {
+  return axios.delete(`books/` + id);
 };

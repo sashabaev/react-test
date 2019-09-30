@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Product } from "../../types";
+import { Book } from "../../types";
 import { BookState } from "../../redux/admin/book/types";
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';

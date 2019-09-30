@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { render } from 'react-dom';
-import { Product } from '../../../types';
+import { Book } from '../../../types';
 import { BookProps } from '../../admin/books';
 import { AddBookState } from '../../../redux/modals/addBook/types';
 
@@ -20,6 +20,7 @@ export class AddBook extends React.Component<BookProps, AddBookState> {
   state: AddBookState = {
     isOpenModal: this.props.isOpenModal,
     error: "",
+    image: this.props.book && this.props.book.image,
     price: this.props.book && this.props.book.price,
     title: this.props.book && this.props.book.title,
     subtitle: this.props.book && this.props.book.subtitle,
@@ -47,10 +48,10 @@ export class AddBook extends React.Component<BookProps, AddBookState> {
     this.setState({ [event.target.name]: event.target.value } as any);
 
   addBook() {
-    let item: Product = {
+    let item: Book = {
       id: "",
       bookCount: 0,
-      image: "",
+      image: this.state.image,
       isBooked: false,
       isbn: 0,
       website: "",
@@ -85,6 +86,8 @@ export class AddBook extends React.Component<BookProps, AddBookState> {
             <TextField autoFocus type="text" id="price" value={this.state.price} name="price" label="price" placeholder="price" fullWidth onChange={this.handle} />
             <br />
             <TextField type="text" id="title" value={this.state.title} name="title" label="title" placeholder="title" fullWidth onChange={this.handle} />
+            <br />
+            <TextField type="text" id="image" value={this.state.image} name="image" label="image" placeholder="image" fullWidth onChange={this.handle} />
             <br />
             <TextField type="text" value={this.state.subtitle} name="subtitle" label="subtitle" placeholder="subtitle" fullWidth onChange={this.handle} />
             <br />

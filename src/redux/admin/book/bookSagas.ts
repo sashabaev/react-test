@@ -1,17 +1,17 @@
 import { put, takeEvery, call } from "redux-saga/effects";
-import * as Products from "../../../services/productService";
+import * as Books from "../../../services/productService";
 
 // worker sagas
 export function* doInitBooks(): IterableIterator<any> {
   yield takeEvery(`@@book/DATA_INIT`, function*(action: any) {
     try { 
-      const fetchData = yield call(Products.getProducts);
+      const fetchData = yield call(Books.getPaging, action.limit, action.page);
       let data = fetchData.data
       console.log(JSON.stringify(data));
       yield put({
         type: `@@book/DATA_LOADED`,
         payload: {
-          data: data
+          data: data.results
         }
       });
     } catch (error) {
@@ -27,7 +27,7 @@ export function* doInitBooks(): IterableIterator<any> {
 export function* updateBook(): IterableIterator<any> {
   yield takeEvery(`@@book/DATA_UPDATE`, function*(action: any) {
     try { 
-      const fetchData = yield call(Products.updateProduct, action.book);
+      const fetchData = yield call(Books.updateBook, action.book);
       let data = fetchData.data
       console.log(JSON.stringify(data));
       yield put({
@@ -50,7 +50,7 @@ export function* addBook(): IterableIterator<any> {
   yield takeEvery(`@@book/DATA_ADD`, function*(action: any) {
     try { 
       debugger
-      const fetchData = yield call(Products.addProduct, action.book);
+      const fetchData = yield call(Books.addBook, action.book);
       let data = fetchData.data
       console.log(JSON.stringify(data));
       yield put({
@@ -73,7 +73,7 @@ export function* addBook(): IterableIterator<any> {
 export function* removeBook(): IterableIterator<any> {
   yield takeEvery(`@@book/DATA_REMOVE`, function*(action: any) {
     try { 
-      const fetchData = yield call(Products.deleteProduct, action.id);
+      const fetchData = yield call(Books.deleteBook, action.id);
       let data = fetchData.data
       console.log(JSON.stringify(data));
       yield put({

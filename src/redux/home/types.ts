@@ -1,5 +1,5 @@
 import { BaseState } from "../../types/baseState";
-import { Product } from "../../types";
+import { Book } from "../../types";
 
 
 export enum HomeActions {
@@ -10,6 +10,6 @@ export enum HomeActions {
 }
 
 export interface HomeState extends BaseState {
-  books: Product[];
+  books: Book[];
   enviroment: string;
 }

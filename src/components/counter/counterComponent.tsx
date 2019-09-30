@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../types";
+import { Book } from "../../types";
 import { CartState } from "../../redux/cart/types";
 import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
 import { Box, IconButton, Badge } from "@material-ui/core";

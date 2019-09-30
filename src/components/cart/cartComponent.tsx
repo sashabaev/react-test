@@ -1,14 +1,14 @@
 import React from 'react';
-import { Product } from '../../types';
+import { Book } from '../../types';
 import { CartState } from '../../redux/cart/types';
 
 export interface CartProps {
   error: string;
-  books: Product[];  
+  books: Book[];  
   doInit: () => void;
   updateCount: (count: number) => void;
-  updateStateCart: (book: Product[]) => void;
-  updateStateHome: (book: Product[]) => void;
+  updateStateCart: (book: Book[]) => void;
+  updateStateHome: (book: Book[]) => void;
 }
 
 export class CartComponent extends React.Component<CartProps, CartState> {
@@ -18,7 +18,7 @@ export class CartComponent extends React.Component<CartProps, CartState> {
     books: [] 
   };
 
-  handleRemove = (item: Product)=>{
+  handleRemove = (item: Book)=>{
     let countBook = 0;    
     item.bookCount = 0;
     for(let item of this.props.books){
@@ -27,7 +27,7 @@ export class CartComponent extends React.Component<CartProps, CartState> {
     this.updateState( countBook );
   }
   //to add the quantity
-  handleAddQuantity = (item: Product)=>{
+  handleAddQuantity = (item: Book)=>{
     let countBook = 0;    
     item.isBooked = !item.isBooked;
     item.bookCount += 1;
@@ -46,7 +46,7 @@ export class CartComponent extends React.Component<CartProps, CartState> {
     updateStateHome(this.props.books);
   }
   //to substruct from the quantity
-  handleSubtractQuantity = (item: Product)=>{
+  handleSubtractQuantity = (item: Book)=>{
     let countBook = 0;    
     item.isBooked = !item.isBooked;
     item.bookCount -= 1;

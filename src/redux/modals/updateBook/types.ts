@@ -1,5 +1,5 @@
 import { BaseState } from "../../../types/baseState";
-import { Product } from "../../../types";
+import { Book } from "../../../types";
 
 export enum AddBookActions {
   DO_UPDATE_BOOK = "DO_UPDATE_BOOK"
@@ -7,9 +7,10 @@ export enum AddBookActions {
 
 export interface UpdateBookState extends BaseState {
   isOpenModal: boolean;
-  book: Product,
+  book: Book,
   price: number,
   title: string,
+  image: string,
   subtitle: string,
   author: string,
   published: Date,

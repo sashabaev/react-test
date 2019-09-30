@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../types";
+import { Book } from "../../types";
 import { BookState } from "../../redux/admin/book/types";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,28 +9,122 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddBook from "../../containers/modals/addBookModalContainer";
 import UpdateBook from "../../containers/modals/updateBookModalContainer";
-import { Button } from "@material-ui/core";
+import { Button, TableFooter, TablePagination, IconButton } from "@material-ui/core";
 import { ConfirmModalProps } from "../modals/confirmModal";
 import ConfirmModal from "../../containers/modals/confirmModalContainer";
+import LastPageIcon from '@material-ui/icons/LastPage';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 
 export interface BookProps {
   error: string;
   isOpenModal: boolean;
-  books: Product[];
-  doInitBooks: () => void;
-  updateBook: (book: Product) => void;
+  books: Book[];
+  doInitBooks: (limit: number, page: number) => void;
+  updateBook: (book: Book) => void;
   doConfirm: (value: string, action: string) => void;
   handleModal: (val: boolean) => void;
-  createBook: (book: Product) => void;
-  book: Product;
+  createBook: (book: Book) => void;
+  book: Book;
   updateState: (modalIsOpen: boolean, value: string, action: string) => void;
-  handleUpdateModal: (val: boolean, book: Product) => void;
+  handleUpdateModal: (val: boolean, book: Book) => void;
 }
 
 const style = {
   width: "120%",
   "margin": "0 0 0 -10%"
 };
+
+const useStyles1 = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexShrink: 0,
+      color: theme.palette.text.secondary,
+      marginLeft: theme.spacing(2.5),
+    },
+  }),
+);
+
+interface TablePaginationActionsProps {
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onChangePage: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, newPage: number) => void;
+}
+
+function TablePaginationActions(props: TablePaginationActionsProps) {
+  const classes = useStyles1();
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onChangePage } = props;
+
+  const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onChangePage(event, 0);
+  };
+
+  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onChangePage(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onChangePage(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <div className={classes.root}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </div>
+  );
+}
+function createData(name: string, calories: number, fat: number) {
+  return { name, calories, fat };
+}
+
+const useStyles2 = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+      marginTop: theme.spacing(3),
+    },
+    table: {
+      minWidth: 500,
+    },
+    tableWrapper: {
+      overflowX: 'auto',
+    },
+  }),
+);
+
+let that: any;
+let page: number = 1;
 
 export class BooksComponent extends React.Component<BookProps, BookState> {
   confirmProps: ConfirmModalProps = {
@@ -48,28 +142,24 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
     books: []
   };
 
-  init = () => {
+  init = (limit: number, newPage: number) => {
+    that = this;
+    page = newPage + 1;
     const { doInitBooks } = this.props;
-    doInitBooks();
+    doInitBooks(limit, newPage);
   };
 
-  addNewBook(item: Product) {
+  addNewBook(item: Book) {
     const { createBook } = this.props;
     createBook(item);
   }
 
-  updateBook(item: Product) {
+  updateBook(item: Book) {
     const { updateBook } = this.props;
     updateBook(item);
   }
 
-  // removeBook() {
-  //   confirmProps.action = "@@book/DATA_REMOVE";
-  //   confirmProps.value = this.state.idForRemove;
-  //   this.setState(this.state);
-  // }
-
-  openModalUpdate(item: Product) {
+  openModalUpdate(item: Book) {
     const { handleUpdateModal } = this.props;
     handleUpdateModal(true, item);
   }
@@ -78,7 +168,23 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
     this.state.isOpenModal = false;
     this.setState(this.state);
   }
+  handleChangePage(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    newPage: number,
+  ) {
+    debugger
+    that.init(10, newPage)
+    //setPage(newPage);
+  }
 
+  handleChangeRowsPerPage(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    debugger
+    that.init(10, 1)
+    // setRowsPerPage(parseInt(event.target.value, 10));
+    // setPage(0);
+  }
   handleClickOpen(id: string) {
     this.state.value = id;
     this.state.isOpenModal = true;
@@ -87,10 +193,8 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
     const { value } = this.confirmProps;
     const { updateState } = this.props;
     updateState(true, id, "@@book/DATA_REMOVE");
-    //this.confirmProps.action = "@@book/DATA_REMOVE";
     this.confirmProps.isOpenModal = this.state.isOpenModal;
     this.confirmProps.value = id;
-    //this.setState(this.state);
   }
 
   render() {
@@ -136,30 +240,32 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={this.props.books.length}
+                  rowsPerPage={1}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { 'aria-label': 'rows per page' },
+                    native: true,
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
-        {/* <Dialog open={this.state.isOpenModal} onClose={() => this.handleClose()} aria-labelledby="responsive-dialog-title">
-          <DialogTitle id="responsive-dialog-title">{"Confirmation"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Do you sure?
-          </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => this.handleClose()} color="primary">
-              Disagree
-          </Button>
-            <Button onClick={() => this.doConfirm()} color="primary" autoFocus>
-              Agree
-          </Button>
-          </DialogActions>
-        </Dialog> */}
       </div>
     );
   }
 
   async componentDidMount() {
     console.log("init");
-    this.init();
+    this.init(10, 0);
   }
 }

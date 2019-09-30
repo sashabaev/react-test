@@ -18,6 +18,7 @@ export class UpdateBook extends React.Component<BookProps, UpdateBookState> {
         isOpenModal: this.props.isOpenModal,
         book: this.props.book && this.props.book,
         error: "",
+        image: this.props.book && this.props.book.image,
         price: this.props.book && this.props.book.price,
         title: this.props.book && this.props.book.title,
         subtitle: this.props.book && this.props.book.subtitle,
@@ -33,6 +34,7 @@ export class UpdateBook extends React.Component<BookProps, UpdateBookState> {
         if (handleUpdateModal)
             handleUpdateModal(true, this.props.book);
         this.state.isOpenModal = true;
+        this.state.image = this.state.image && this.state.image ||  this.props.book.image;
         this.state.author = this.state.author && this.state.author ||  this.props.book.author;
         this.state.description = this.state.description && this.state.description||this.props.book.description;
         this.state.pages =  this.state.pages && this.state.pages || this.props.book.pages;
@@ -60,6 +62,7 @@ export class UpdateBook extends React.Component<BookProps, UpdateBookState> {
         item.author = this.state.author;
         item.description = this.state.description;
         item.pages = this.state.pages;
+        item.image = this.state.image;
         item.price = this.state.price;
         item.published = this.state.published;
         item.publisher = this.state.publisher;
@@ -88,6 +91,8 @@ export class UpdateBook extends React.Component<BookProps, UpdateBookState> {
                         <TextField autoFocus type="text" id="price" value={this.state.price} name="price" label="price" placeholder="price" fullWidth onChange={this.handle} />
                         <br />
                         <TextField type="text" id="title" value={this.state.title} name="title" label="title" placeholder="title" fullWidth onChange={this.handle} />
+                        <br />
+                        <TextField type="text" id="image" value={this.state.image} name="image" label="image" placeholder="image" fullWidth onChange={this.handle} />
                         <br />
                         <TextField type="text" value={this.state.subtitle} name="subtitle" label="subtitle" placeholder="subtitle" fullWidth onChange={this.handle} />
                         <br />

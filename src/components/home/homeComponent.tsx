@@ -1,14 +1,14 @@
 import React from "react";
 import { HomeState } from "../../redux/home/types";
-import { Product } from "../../types";
+import { Book } from "../../types";
 
 export interface HomeProps {
   error: string;
-  books: Product[];
-  doInit: (book: Product[]) => void;
+  books: Book[];
+  doInit: (book: Book[]) => void;
   updateCount: (count: number) => void;
-  updateStateCart: (book: Product[]) => void;
-  updateStateHome: (book: Product[]) => void;
+  updateStateCart: (book: Book[]) => void;
+  updateStateHome: (book: Book[]) => void;
 }
 
 export class HomeComponent extends React.Component<HomeProps, HomeState> {
@@ -23,7 +23,7 @@ export class HomeComponent extends React.Component<HomeProps, HomeState> {
     doInit(this.props.books);
   };
 
-  addToCart(item: Product){
+  addToCart(item: Book){
     let countBook = 0;    
     item.isBooked = !item.isBooked;
     item.bookCount +=1;
@@ -42,7 +42,7 @@ export class HomeComponent extends React.Component<HomeProps, HomeState> {
     updateStateHome(this.props.books);
   }
 
-  removeFromCart(item: Product){
+  removeFromCart(item: Book){
     let countBook = 0;    
     item.isBooked = !item.isBooked;
     item.bookCount -= 1;
@@ -55,7 +55,7 @@ export class HomeComponent extends React.Component<HomeProps, HomeState> {
   render() {
     return (
       <div>       
-        <h2>Products</h2>
+        <h2>Books</h2>
         <div className="row">   
           {    
               this.props.books && this.props.books.map((item, ix) => { 

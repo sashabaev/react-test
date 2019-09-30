@@ -8,6 +8,7 @@ export enum AddBookActions {
     isOpenModal: boolean;
     price: number,
     title: string,
+    image: string,
     subtitle: string,
     author: string,
     published: Date,

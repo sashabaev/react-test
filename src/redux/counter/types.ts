@@ -1,5 +1,5 @@
 import { BaseState } from "../../types/baseState";
-import { Product } from "../../types";
+import { Book } from "../../types";
 
 
 export enum CounterActions {

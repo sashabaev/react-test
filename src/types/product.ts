@@ -1,4 +1,4 @@
-export interface Product {
+export interface Book {
   id: string,
   price: number,
   image: string,

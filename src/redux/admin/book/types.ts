@@ -1,5 +1,5 @@
 import { BaseState } from "../../../types/baseState";
-import { Product } from "../../../types";
+import { Book } from "../../../types";
 
 
 export enum BookActions {
@@ -14,8 +14,8 @@ export enum BookActions {
 }
 
 export interface BookState extends BaseState {
-  books: Product[];
-  book?: Product;
+  books: Book[];
+  book?: Book;
   isOpenModal: boolean;
   value: string;
 }
