@@ -18,4 +18,5 @@ export interface BookState extends BaseState {
   book?: Book;
   isOpenModal: boolean;
   value: string;
+  total: number;
 }

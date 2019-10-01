@@ -22,6 +22,7 @@ export interface BookProps {
   error: string;
   isOpenModal: boolean;
   books: Book[];
+  total: number;
   doInitBooks: (limit: number, page: number) => void;
   updateBook: (book: Book) => void;
   doConfirm: (value: string, action: string) => void;
@@ -124,7 +125,8 @@ const useStyles2 = makeStyles((theme: Theme) =>
 );
 
 let that: any;
-let page: number = 1;
+let page: number = 0;
+let rowsPerPage: number = 2;
 
 export class BooksComponent extends React.Component<BookProps, BookState> {
   confirmProps: ConfirmModalProps = {
@@ -139,12 +141,12 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
     error: "",
     isOpenModal: false,
     value: "",
-    books: []
+    books: [],
+    total: 0
   };
 
   init = (limit: number, newPage: number) => {
-    that = this;
-    page = newPage + 1;
+    that = this;    
     const { doInitBooks } = this.props;
     doInitBooks(limit, newPage);
   };
@@ -172,18 +174,16 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number,
   ) {
-    debugger
-    that.init(10, newPage)
+    page = newPage;
+    that.init(rowsPerPage, newPage)
     //setPage(newPage);
   }
 
   handleChangeRowsPerPage(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
-    debugger
-    that.init(10, 1)
-    // setRowsPerPage(parseInt(event.target.value, 10));
-    // setPage(0);
+    rowsPerPage = parseInt(event.target.value, 10);
+    that.init(rowsPerPage, 0)
   }
   handleClickOpen(id: string) {
     this.state.value = id;
@@ -243,10 +243,10 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
+                  rowsPerPageOptions={[2, 5, 10]}
                   colSpan={3}
-                  count={this.props.books.length}
-                  rowsPerPage={1}
+                  count={this.props.total}
+                  rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
                     inputProps: { 'aria-label': 'rows per page' },
@@ -266,6 +266,6 @@ export class BooksComponent extends React.Component<BookProps, BookState> {
 
   async componentDidMount() {
     console.log("init");
-    this.init(10, 0);
+    this.init(rowsPerPage, page);
   }
 }

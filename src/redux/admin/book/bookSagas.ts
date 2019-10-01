@@ -11,7 +11,7 @@ export function* doInitBooks(): IterableIterator<any> {
       yield put({
         type: `@@book/DATA_LOADED`,
         payload: {
-          data: data.results
+          data: data
         }
       });
     } catch (error) {
@@ -49,14 +49,13 @@ export function* updateBook(): IterableIterator<any> {
 export function* addBook(): IterableIterator<any> {
   yield takeEvery(`@@book/DATA_ADD`, function*(action: any) {
     try { 
-      debugger
       const fetchData = yield call(Books.addBook, action.book);
       let data = fetchData.data
       console.log(JSON.stringify(data));
       yield put({
         type: `@@book/DATA_ADDED`,
         payload: {
-          data: data
+          data: data.raw.ops[0]
         }
       });
     } catch (error) {

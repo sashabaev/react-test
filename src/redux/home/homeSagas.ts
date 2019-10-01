@@ -5,16 +5,16 @@ import * as Products from "../../services/productService";
 export function* doInit(): IterableIterator<any> {
   yield takeEvery(`@@home/DATA_INIT`, function*(action: any) {
     try {
-      let data = action.books;
-      if(!action.books || action.books.length === 0){
-      const fetchData = yield call(Products.getBooks);
-       data = fetchData.data
-    } 
+      let data = yield call(Products.getBooks);
+    //   if(!action.books || action.books.length === 0){
+    //   const fetchData = yield call(Products.getBooks);
+    //    data = fetchData.data
+    // } 
       console.log(JSON.stringify(data));
       yield put({
         type: `@@home/DATA_LOADED`,
         payload: {
-          data: data
+          data: data.data
         }
       });
     } catch (error) {

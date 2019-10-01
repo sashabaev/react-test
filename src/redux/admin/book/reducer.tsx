@@ -7,6 +7,7 @@ export const initialState: BookState = {
   isOpenModal: false,
   value: "",
   books: [],
+  total:0
 };
 
 export function bookReducer(state: BookState = initialState, action: any) {
@@ -17,7 +18,8 @@ export function bookReducer(state: BookState = initialState, action: any) {
     case `@@book/DATA_LOADED`: {
       return {
         ...state,
-        books: action.payload.data
+        total: action.payload.data.total,
+        books: action.payload.data.results
       };
     }
     case `@@book/DATA_ADD`: {
